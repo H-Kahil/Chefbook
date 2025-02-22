@@ -1,16 +1,11 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Home,
-  User,
-  BookmarkIcon,
-  Users,
-  ChefHat,
-  Utensils,
-} from "lucide-react";
+import { Home, User, BookmarkIcon, Users } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
+import { Separator } from "@/components/ui/separator";
 
 interface NavItem {
   icon: React.ReactNode;
@@ -34,6 +29,25 @@ interface LeftSidebarProps {
 
 const LeftSidebar = ({
   activeItem = "home",
+  navItems = [
+    {
+      icon: <Home className="w-5 h-5" />,
+      label: "Home",
+      href: "/",
+      active: true,
+    },
+    { icon: <User className="w-5 h-5" />, label: "Profile", href: "/profile" },
+    {
+      icon: <BookmarkIcon className="w-5 h-5" />,
+      label: "Saved Recipes",
+      href: "/saved",
+    },
+    {
+      icon: <Users className="w-5 h-5" />,
+      label: "Following",
+      href: "/following",
+    },
+  ],
   recommendedChefs = [
     {
       id: "1",
@@ -58,87 +72,59 @@ const LeftSidebar = ({
   const navigate = useNavigate();
 
   return (
-    <div className="w-[280px] h-[calc(100vh-56px)] fixed left-0 top-14">
-      <ScrollArea className="h-full py-4 px-2">
-        <div className="space-y-1">
-          {/* User Profile Shortcut */}
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 p-3 h-auto fb-hover"
-            onClick={() => navigate("/profile")}
-          >
-            <Avatar className="h-9 w-9">
-              <AvatarImage
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=John"
-                alt="John Doe"
-              />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-            <span className="font-medium">John Doe</span>
-          </Button>
+    <div className="w-[280px] h-[918px] border-r bg-white p-4 fixed left-0 top-16">
+      <ScrollArea className="h-full pr-4">
+        {/* Navigation Menu */}
+        <nav className="space-y-2 mb-6">
+          {navItems.map((item, index) => (
+            <Button
+              key={index}
+              variant={item.active ? "secondary" : "ghost"}
+              className={`w-full justify-start gap-3 ${item.active ? "bg-secondary" : ""}`}
+              asChild
+            >
+              <a href={item.href}>
+                {item.icon}
+                <span className="font-medium">{item.label}</span>
+              </a>
+            </Button>
+          ))}
+        </nav>
 
-          {/* Main Navigation */}
-          <Button
-            variant={activeItem === "home" ? "secondary" : "ghost"}
-            className="w-full justify-start gap-3 p-3 h-auto fb-hover"
-            onClick={() => navigate("/")}
-          >
-            <Home className="h-6 w-6" />
-            <span className="font-medium">Home</span>
-          </Button>
+        <Separator className="my-6" />
 
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 p-3 h-auto fb-hover"
-            onClick={() => navigate("/recipes")}
-          >
-            <Utensils className="h-6 w-6" />
-            <span className="font-medium">My Recipes</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 p-3 h-auto fb-hover"
-            onClick={() => navigate("/saved")}
-          >
-            <BookmarkIcon className="h-6 w-6" />
-            <span className="font-medium">Saved</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 p-3 h-auto fb-hover"
-            onClick={() => navigate("/following")}
-          >
-            <Users className="h-6 w-6" />
-            <span className="font-medium">Following</span>
-          </Button>
-
-          {/* Recommended Chefs */}
-          <div className="mt-6 pt-6 border-t">
-            <h3 className="px-3 text-sm font-semibold text-gray-500 mb-2">
-              RECOMMENDED CHEFS
-            </h3>
-            {recommendedChefs.map((chef) => (
-              <Button
-                key={chef.id}
-                variant="ghost"
-                className="w-full justify-start gap-3 p-3 h-auto fb-hover"
-                onClick={() => navigate(`/chef/${chef.id}`)}
-              >
-                <Avatar className="h-9 w-9">
-                  <AvatarImage src={chef.avatar} alt={chef.name} />
-                  <AvatarFallback>{chef.name[0]}</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col items-start">
-                  <span className="font-medium">{chef.name}</span>
-                  <span className="text-sm text-gray-500">
-                    {chef.specialty}
-                  </span>
+        {/* Recommended Chefs Section */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">Recommended Chefs</h2>
+          {recommendedChefs.map((chef) => (
+            <Card key={chef.id} className="bg-gray-50">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-4">
+                  <Avatar
+                    className="cursor-pointer"
+                    onClick={() => navigate(`/chef/${chef.id}`)}
+                  >
+                    <AvatarImage src={chef.avatar} alt={chef.name} />
+                    <AvatarFallback>{chef.name[0]}</AvatarFallback>
+                  </Avatar>
+                  <div
+                    className="flex-1 cursor-pointer"
+                    onClick={() => navigate(`/chef/${chef.id}`)}
+                  >
+                    <h3 className="font-medium">{chef.name}</h3>
+                    <p className="text-sm text-gray-500">{chef.specialty}</p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate(`/chef/${chef.id}`)}
+                  >
+                    View
+                  </Button>
                 </div>
-              </Button>
-            ))}
-          </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </ScrollArea>
     </div>
