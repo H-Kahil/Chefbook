@@ -8,7 +8,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Search, Globe, Menu } from "lucide-react";
+import { Search, Globe, Menu, LogIn, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
   userName?: string;
@@ -22,12 +23,28 @@ const Navbar = ({
   userAvatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
   onLanguageChange = () => {},
   onSearch = () => {},
-}: NavbarProps) => {
+  isLoggedIn = false,
+}: NavbarProps & { isLoggedIn?: boolean }) => {
+  const navigate = useNavigate();
   return (
     <nav className="w-full h-16 bg-white border-b fixed top-0 left-0 z-50">
       <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center">
+        {/* Logo and Auth Button */}
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() =>
+              isLoggedIn ? console.log("logout") : console.log("login")
+            }
+            className="text-gray-600 hover:text-gray-900"
+          >
+            {isLoggedIn ? (
+              <LogOut className="h-5 w-5" />
+            ) : (
+              <LogIn className="h-5 w-5" />
+            )}
+          </Button>
           <h1 className="text-2xl font-bold text-orange-600">ChefBook</h1>
         </div>
 
