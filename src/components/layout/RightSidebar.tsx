@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -37,36 +37,61 @@ const RightSidebar = ({
   ],
 }: RightSidebarProps) => {
   return (
-    <div className="w-[280px] h-full bg-white p-4 border-l">
-      {/* Sponsored Content Section */}
-      <div>
-        <h2 className="text-lg font-semibold mb-4">Sponsored</h2>
-        <ScrollArea className="h-[800px]">
-          <div className="space-y-4 pr-4">
+    <div className="w-[280px] h-[calc(100vh-56px)] fixed right-0 top-14">
+      <ScrollArea className="h-full py-4 px-2">
+        {/* Sponsored Content */}
+        <div className="mb-6">
+          <h3 className="px-3 text-sm font-semibold text-gray-500 mb-2">
+            SPONSORED
+          </h3>
+          <div className="space-y-4">
             {sponsoredContent.map((content) => (
-              <Card key={content.id} className="overflow-hidden">
-                <CardHeader className="p-0">
-                  <img
-                    src={content.imageUrl}
-                    alt={content.title}
-                    className="w-full h-32 object-cover"
-                  />
-                </CardHeader>
-                <CardContent className="p-4">
-                  <h3 className="font-medium text-sm">{content.title}</h3>
-                  <Button
-                    variant="link"
-                    className="mt-2 p-0 h-auto text-sm"
-                    asChild
-                  >
-                    <a href={content.link}>Learn More</a>
-                  </Button>
-                </CardContent>
-              </Card>
+              <a
+                key={content.id}
+                href={content.link}
+                className="block hover:bg-gray-50 rounded-lg transition-colors"
+              >
+                <Card className="border-none shadow-none">
+                  <CardContent className="p-3 flex items-center gap-3">
+                    <img
+                      src={content.imageUrl}
+                      alt={content.title}
+                      className="w-[100px] h-[100px] object-cover rounded-lg"
+                    />
+                    <h4 className="font-medium text-sm">{content.title}</h4>
+                  </CardContent>
+                </Card>
+              </a>
             ))}
           </div>
-        </ScrollArea>
-      </div>
+        </div>
+
+        {/* Footer Links */}
+        <div className="px-3 text-xs text-gray-500">
+          <div className="flex flex-wrap gap-2">
+            <a href="#" className="hover:underline">
+              Privacy
+            </a>{" "}
+            ·
+            <a href="#" className="hover:underline">
+              Terms
+            </a>{" "}
+            ·
+            <a href="#" className="hover:underline">
+              Advertising
+            </a>{" "}
+            ·
+            <a href="#" className="hover:underline">
+              Cookies
+            </a>{" "}
+            ·
+            <a href="#" className="hover:underline">
+              More
+            </a>
+          </div>
+          <div className="mt-2">© 2024 ChefBook</div>
+        </div>
+      </ScrollArea>
     </div>
   );
 };
